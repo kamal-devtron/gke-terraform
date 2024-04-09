@@ -7,7 +7,7 @@ provider "google" {
 
 # Create a VPC network
 resource "google_compute_network" "my_vpc" {
-  name                    = "my-vpc"
+  name                    = "devtron-vpc"
   auto_create_subnetworks = false
 }
 
@@ -78,7 +78,7 @@ resource "google_service_account" "default" {
 }
 
 resource "google_container_cluster" "primary" {
-  name     = "my-gke-cluster"
+  name     = "devtron-cluster"
   location = "asia-south1"
 
   network       = google_compute_network.my_vpc.id
@@ -112,8 +112,8 @@ resource "google_container_node_pool" "devtron-nodes" {
   }
   
   autoscaling {
-     min_node_count = 2
-    max_node_count = 5
+     min_node_count = 1
+    max_node_count = 3
   }
   network_config {
     enable_private_nodes = true
@@ -133,7 +133,7 @@ resource "google_container_node_pool" "ci-nodes" {
     disk_size_gb= 50
     
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    # service_account = google_service_account.default.email
+    service_account = google_service_account.default.email
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
@@ -148,8 +148,8 @@ resource "google_container_node_pool" "ci-nodes" {
   }
  
   autoscaling {
-    min_node_count = 1
-    max_node_count = 5
+    min_node_count = 0
+    max_node_count = 3
   }
   network_config {
     enable_private_nodes = true
