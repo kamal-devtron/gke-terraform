@@ -59,11 +59,7 @@ output "vpc_details" {
 }
 
 # Create router For your VPC
-resource "google_compute_router" "router" {
-  name    = "my-router"
-  network = google_compute_network.my_vpc.self_link
-  region  = "asia-south1"
-}
+
 
 # resource "google_compute_router_nat" "nat-gateway" {
 #   name                  = "my-nat"
@@ -77,7 +73,7 @@ resource "google_compute_router" "router" {
 
 resource "google_service_account" "default" {
   account_id   = "project_id"   #Required
-  display_name = "Kamal Acharya"
+  display_name = "<display_name>"
 
 }
 
@@ -102,8 +98,8 @@ resource "google_container_node_pool" "devtron-nodes" {
   
 
   node_config {
-    preemptible  = true
-    machine_type = "e2-medium"
+    preemptible  = false
+    machine_type = "e2-standard-4"
     disk_size_gb = 50
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
     # service_account = google_service_account.default.email
@@ -133,7 +129,7 @@ resource "google_container_node_pool" "ci-nodes" {
 
   node_config {
     preemptible  = true
-    machine_type = "e2-medium"
+    machine_type = "e2-standard-4"
     disk_size_gb= 50
     
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
